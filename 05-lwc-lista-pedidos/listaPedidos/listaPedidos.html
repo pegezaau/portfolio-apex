@@ -1,0 +1,47 @@
+<template>
+    <lightning-card title="Pedidos da Conta" icon-name="standard:orders">
+        <!-- Total vendido -->
+        <div slot="actions" class="total-vendido">
+            <span class="rotulo">Total vendido</span>
+            <span class="valor">
+                <lightning-formatted-number value={totalVendido} format-style="currency" currency-code="BRL"></lightning-formatted-number>
+            </span>
+        </div>
+
+        <!-- Busca -->
+        <div class="slds-p-horizontal_medium slds-p-bottom_small">
+            <lightning-input type="search" label="Buscar pedido" placeholder="Digite o número ou o status..."
+                value={termoBusca} onchange={handleBusca}>
+            </lightning-input>
+        </div>
+
+        <!-- Carregando -->
+        <template if:true={carregando}>
+            <lightning-spinner alternative-text="Carregando pedidos..."></lightning-spinner>
+        </template>
+
+        <!-- Erro -->
+        <template if:true={erro}>
+            <div class="slds-p-around_medium slds-text-color_error">
+                Não foi possível carregar os pedidos. Tente novamente mais tarde.
+            </div>
+        </template>
+
+        <!-- Sem pedidos -->
+        <template if:true={semPedidos}>
+            <div class="slds-p-around_medium slds-text-align_center">
+                Nenhum pedido encontrado para esta conta.
+            </div>
+        </template>
+
+        <!-- Tabela -->
+        <template if:true={temPedidos}>
+            <lightning-datatable key-field="id" data={pedidosFiltrados} columns={colunas}
+                hide-checkbox-column="true" onrowaction={handleLinha}>
+            </lightning-datatable>
+            <p class="slds-p-around_medium slds-text-body_small">
+                Exibindo {quantidadeExibida} de {quantidadeTotal} pedido(s).
+            </p>
+        </template>
+    </lightning-card>
+</template>
